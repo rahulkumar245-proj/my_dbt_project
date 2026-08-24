@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: customers
+    description: "Customer records derived from the raw Sales data. The latest order record is used for each CustomerID."
+
+    columns:
+      - name: CustomerID
+        description: "Unique identifier for each customer."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: CustomerName
+        description: "Customer name."
+        data_tests:
+          - not_null
+
+  - name: orders
+    description: "Clean order-level records derived from the raw Sales data."
+
+    columns:
+      - name: OrderID
+        description: "Unique identifier for each order."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: CustomerID
+        description: "Identifier of the customer who placed the order."
+        data_tests:
+          - not_null
+
+      - name: ProductID
+        description: "Identifier of the product included in the order."
+        data_tests:
+          - not_null

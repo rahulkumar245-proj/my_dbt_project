@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: raw
+    database: dbtpractice01
+    schema: dbt_raw
+    tables:
+      - name: sales
+        identifier: Sales
