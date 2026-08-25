@@ -35,3 +35,18 @@ models:
         description: "Identifier of the product included in the order."
         data_tests:
           - not_null
+
+  - name: products
+    description: "Unique products derived from the raw Sales data."
+
+    columns:
+      - name: ProductID
+        description: "Unique identifier for each product."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: ProductName
+        description: "Name of the product."
+        data_tests:
+          - not_null    
