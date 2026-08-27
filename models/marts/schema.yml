@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Customer dimension table."
+
+    columns:
+      - name: CustomerID
+        data_tests:
+          - not_null
+          - unique
+
+      - name: CustomerName
+        data_tests:
+          - not_null
+
+  - name: dim_products
+    description: "Product dimension table."
+
+    columns:
+      - name: ProductID
+        data_tests:
+          - not_null
+          - unique
+
+      - name: ProductName
+        data_tests:
+          - not_null
+
+  - name: fct_orders
+    description: "Order fact table at one row per order."
+
+    columns:
+      - name: OrderID
+        data_tests:
+          - not_null
+          - unique
+
+      - name: CustomerID
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: CustomerID
+
+      - name: ProductID
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: ProductID
+
+      - name: TotalAmount
+        data_tests:
+          - not_null

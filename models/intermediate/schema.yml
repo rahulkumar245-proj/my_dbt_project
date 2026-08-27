@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: int_orders_enriched
+    description: "Enriched order data combining orders, customers, and products."
+
+    columns:
+      - name: OrderID
+        data_tests:
+          - not_null
+          - unique
+
+      - name: CustomerID
+        data_tests:
+          - not_null
+
+      - name: ProductID
+        data_tests:
+          - not_null
+
+      - name: TotalAmount
+        data_tests:
+          - not_null
