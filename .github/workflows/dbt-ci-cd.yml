@@ -1,0 +1,128 @@
+name: dbt CI/CD
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+
+  # -------------------------------------------------------
+  # PR -> Validate + Build in STAGING
+  # -------------------------------------------------------
+  staging:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+
+      - name: Install dbt
+        run: |
+          python -m pip install --upgrade pip
+          pip install dbt-bigquery==1.12.0
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          project_id: dbtpractice01
+
+      - name: Create dbt profiles.yml
+        run: |
+          mkdir -p ~/.dbt
+
+          cat <<EOF > ~/.dbt/profiles.yml
+          my_dbt_project:
+            target: staging
+
+            outputs:
+
+              staging:
+                type: bigquery
+                method: oauth
+                project: dbtpractice01
+                dataset: dbt_staging
+                threads: 4
+                location: US
+                priority: interactive
+          EOF
+
+      - name: Validate dbt project
+        run: |
+          dbt debug --target staging
+          dbt parse --target staging
+          dbt compile --target staging
+
+      - name: Build and test staging
+        run: dbt build --target staging
+
+
+  # -------------------------------------------------------
+  # Merge to MAIN -> Build in PRODUCTION
+  # -------------------------------------------------------
+  production:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+
+      - name: Install dbt
+        run: |
+          python -m pip install --upgrade pip
+          pip install dbt-bigquery==1.12.0
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          project_id: dbtpractice01
+
+      - name: Create dbt profiles.yml
+        run: |
+          mkdir -p ~/.dbt
+
+          cat <<EOF > ~/.dbt/profiles.yml
+          my_dbt_project:
+            target: prod
+
+            outputs:
+
+              prod:
+                type: bigquery
+                method: oauth
+                project: dbtpractice01
+                dataset: dbt_production
+                threads: 4
+                location: US
+                priority: interactive
+          EOF
+
+      - name: Validate production configuration
+        run: dbt debug --target prod
+
+      - name: Build and test production
+        run: dbt build --target prod
