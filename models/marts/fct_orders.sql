@@ -1,3 +1,12 @@
+{{ config(
+    materialized='table',
+    partition_by={
+        "field": "OrderDate",
+        "data_type": "date"
+    },
+    cluster_by=["CustomerID"]
+) }}
+
 select
     OrderID,
     OrderDate,
@@ -12,4 +21,5 @@ select
     TotalAmount,
     PaymentMethod,
     OrderStatus
+
 from {{ ref('int_orders_enriched') }}
