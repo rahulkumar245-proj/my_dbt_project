@@ -10,6 +10,7 @@ select
     p.ProductName,
     o.Quantity,
     o.UnitPrice,
+    {{ calculate_order_amount('o.Quantity', 'o.UnitPrice', 3) }} as GrossAmount,
     o.Discount,
     o.Tax,
     o.ShippingCost,
