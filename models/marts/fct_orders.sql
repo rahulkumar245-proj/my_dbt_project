@@ -4,7 +4,8 @@
         "field": "OrderDate",
         "data_type": "date"
     },
-    cluster_by=["CustomerID"]
+    cluster_by=["CustomerID"],
+    partition_expiration_days=59
 ) }}
 
 select
@@ -20,6 +21,7 @@ select
     ShippingCost,
     TotalAmount,
     PaymentMethod,
-    OrderStatus
+    OrderStatus,
+    StatusCategory
 
 from {{ ref('int_orders_enriched') }}

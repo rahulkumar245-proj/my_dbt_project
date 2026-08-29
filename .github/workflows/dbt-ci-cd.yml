@@ -70,7 +70,7 @@ jobs:
           dbt compile --target staging
 
       - name: Build and test staging
-        run: dbt build --target staging
+        run: dbt build --exclude resource_type:snapshot --target staging
 
 
   # -------------------------------------------------------
@@ -125,4 +125,4 @@ jobs:
         run: dbt debug --target prod
 
       - name: Build and test production
-        run: dbt build --target prod
+        run: dbt build --exclude resource_type:snapshot --target prod

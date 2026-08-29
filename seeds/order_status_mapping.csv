@@ -1,0 +1,8 @@
+OrderStatus,StatusCategory
+Completed,Closed
+Delivered,Closed
+Cancelled,Cancelled
+Pending,Open
+Processing,Open
+Shipped,Open
+Returned,Closed
