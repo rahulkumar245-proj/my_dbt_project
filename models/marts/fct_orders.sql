@@ -1,14 +1,12 @@
 {{ config(
+
     materialized='table',
-    partition_by={
-        "field": "OrderDate",
-        "data_type": "date"
-    },
-    cluster_by=["CustomerID"],
-    partition_expiration_days=59
+    cluster_by=["CustomerID"]
+
 ) }}
 
 select
+
     OrderID,
     OrderDate,
     CustomerID,
