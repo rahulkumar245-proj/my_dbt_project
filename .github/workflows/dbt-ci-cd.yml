@@ -63,6 +63,9 @@ jobs:
                 priority: interactive
           EOF
 
+      - name: Install dbt packages
+        run: dbt deps
+
       - name: Validate dbt project
         run: |
           dbt debug --target staging
@@ -121,6 +124,9 @@ jobs:
                 priority: interactive
           EOF
 
+      - name: Install dbt packages
+        run: dbt deps
+            
       - name: Validate production configuration
         run: dbt debug --target prod
 

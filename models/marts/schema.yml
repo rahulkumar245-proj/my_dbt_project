@@ -5,6 +5,11 @@ models:
     description: "Customer dimension table."
 
     columns:
+      - name: CustomerKey
+        data_tests:
+          - not_null
+          - unique
+          
       - name: CustomerID
         data_tests:
           - not_null
