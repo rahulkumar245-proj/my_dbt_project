@@ -60,3 +60,19 @@ models:
       - name: TotalAmount
         data_tests:
           - not_null
+      
+      - name: Quantity
+        data_tests:
+          - positive_value
+      
+      - name: UnitPrice
+        data_tests:
+          - positive_value
+
+      - name: OrderStatus
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Cancelled', 'Delivered', 'Pending', 'Returned', 'Shipped']
+              config:
+                severity: error
