@@ -2,15 +2,17 @@ version: 2
 
 models:
   - name: int_orders_enriched
-    description: "Enriched order data combining orders, customers, and products."
+    description: "Intermediate order model that enriches order transactions with customer, product, and order status information."
 
     columns:
       - name: OrderID
+        description: "Unique identifier for each order."
         data_tests:
           - not_null
           - unique
 
       - name: CustomerID
+        description: "Name of the customer associated with the order."
         data_tests:
           - not_null
 
@@ -21,3 +23,6 @@ models:
       - name: TotalAmount
         data_tests:
           - not_null
+
+      - name: StatusCategory
+        description: "Business category assigned to the order status using the order status mapping."
