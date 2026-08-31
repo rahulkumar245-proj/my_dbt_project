@@ -33,15 +33,17 @@ models:
           - not_null
 
   - name: fct_orders
-    description: "Order fact table at one row per order."
+    description: "Order-level fact table containing sales transactions and order attributes."
 
     columns:
       - name: OrderID
+        description: "Unique identifier for each order."
         data_tests:
           - not_null
           - unique
 
       - name: CustomerID
+        description: "Identifier of the customer who placed the order."
         data_tests:
           - not_null
           - relationships:
@@ -58,6 +60,7 @@ models:
                 field: ProductID
 
       - name: TotalAmount
+        description: "Final monetary amount of the order."
         data_tests:
           - not_null
       
